@@ -19,7 +19,7 @@ export default function Sidebar({ communications, setCommunications }: SidebarPr
   useEffect(() => {
     const fetchTags = () => {
       const allTags = communications.flatMap((d) => d.tags || []);
-      const uniqueTags = [...new Set(allTags)];
+      const uniqueTags = Array.from(new Set(allTags));
       const tagCounts = uniqueTags.map((tag) => ({
         tag,
         count: allTags.filter((t) => t === tag).length,
