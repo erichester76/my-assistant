@@ -1,40 +1,30 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+// eslint.config.mjs
+import nextPlugin from '@next/eslint-plugin-next';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import parser from '@typescript-eslint/parser';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
-
-eslintConfig.push(
-  compat.config({
+export default [
+  {
+    files: ['**/*.ts', '**/*.tsx'], // Target TypeScript files
+    languageOptions: {
+      parser: parser, // Use TypeScript parser
+      parserOptions: {
+        project: './tsconfig.json', // Point to your TypeScript config
+      },
+    },
+    plugins: {
+      '@typescript-eslint': typescriptEslint, // TypeScript plugin
+      '@next/next': nextPlugin, // Next.js plugin
+    },
     rules: {
-      "react/react-in-jsx-scope": "off",
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_' },
       ],
-      "import/no-anonymous-default-export": [
-        "error",
-        {
-          allowArray: true,
-          allowArrowFunction: true,
-          allowAnonymousClass: true,
-          allowAnonymousFunction: true,
-          allowCallExpression: true,
-          allowLiteral: true,
-          allowObject: true,
-        },
-      ],
     },
-  }),
-);
-
-export default eslintConfig;
+    extends: [
+      'next/core-web-vitals', // Next.js Core Web Vitals rules
+      'next/typescript',      // Next.js TypeScript rules
+    ],
+  },
+];
