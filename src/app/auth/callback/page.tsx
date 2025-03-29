@@ -14,7 +14,7 @@ export default function AuthCallback() {
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange((event, _session) => {
       if (event === "SIGNED_IN") {
         router.push("/inbox"); // Redirect to inbox or another page
       }
