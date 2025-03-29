@@ -17,7 +17,7 @@ export default function AuthComponent() {
       supabaseClient={supabase}
       appearance={{ theme: ThemeSupa }}
       providers={["google", "github"]} // Optional: Add OAuth providers
-      redirectTo={`${window.location.origin}/auth/callback`}
-    />
+      redirectTo={`${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`} 
+   />
   );
 }
