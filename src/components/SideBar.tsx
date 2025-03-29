@@ -1,17 +1,35 @@
+// src/components/Sidebar.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Communication } from '@/types/communication';
 
+// Define props type for Sidebar
 type SidebarProps = {
   communications: Communication[];
   setCommunications: (communications: Communication[]) => void;
 };
 
 export default function Sidebar({ communications, setCommunications }: SidebarProps) {
+  const [tags, setTags] = useState<{ tag: string; count: number }[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
+  // Calculate tags and their counts based on communications
+  useEffect(() => {
+    const fetchTags = () => {
+      const allTags = communications.flatMap((d) => d.tags || []);
+      const uniqueTags = [...new Set(allTags)];
+      const tagCounts = uniqueTags.map((tag) => ({
+        tag,
+        count: allTags.filter((t) => t === tag).length,
+      }));
+      setTags(tagCounts);
+    };
+    fetchTags();
+  }, [communications]);
+
+  // Filter communications based on type or tag
   const filterCommunications = async (filter: string) => {
     setSelectedFilter(filter);
     let query = supabase.from('communications').select('*').order('timestamp', { ascending: false });
@@ -48,6 +66,18 @@ export default function Sidebar({ communications, setCommunications }: SidebarPr
         >
           Slack
         </li>
+      </ul>
+      <h3>Tags</h3>
+      <ul>
+        {tags.map(({ tag, count }) => (
+          <li
+            key={tag}
+            onClick={() => filterCommunications(tag)}
+            style={{ fontWeight: selectedFilter === tag ? 'bold' : 'normal' }}
+          >
+            {tag} ({count})
+          </li>
+        ))}
       </ul>
     </div>
   );
