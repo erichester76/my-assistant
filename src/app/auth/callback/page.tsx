@@ -14,12 +14,14 @@ export default function AuthCallback() {
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, _session) => {
+    supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
-        router.push("/inbox"); // Redirect to inbox or another page
+        router.push("/inbox"); // Redirect to your desired page after login
+      } else if (event === "SIGNED_OUT") {
+        router.push("/login");
       }
     });
   }, [router]);
 
-  return <div>Logging in...</div>;
+  return <div>Processing login...</div>;
 }
