@@ -4,6 +4,7 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { createClient } from "@supabase/supabase-js";
+import { getURL } from "@/lib/utils/helpers";
 
 // Initialize the Supabase client
 const supabase = createClient(
@@ -17,7 +18,7 @@ export default function AuthComponent() {
       supabaseClient={supabase}
       appearance={{ theme: ThemeSupa }}
       providers={["google", "github"]} // Optional: Add OAuth providers
-      redirectTo={`${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`} 
+      redirectTo={getURL()} // Redirect URL after login
    />
   );
 }
