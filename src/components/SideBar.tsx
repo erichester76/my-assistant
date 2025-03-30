@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Communication } from '@/types/communication';
+import UserInfo from '@/components/UserInfo';
 
 // Define props type for Sidebar
 type SidebarProps = {
@@ -79,6 +80,9 @@ export default function Sidebar({ communications, setCommunications }: SidebarPr
           </li>
         ))}
       </ul>
+      <div style={{ position: 'absolute', bottom: '0', width: '100%', padding: '10px' }}>
+       <UserInfo />
+      </div>
     </div>
   );
 }
