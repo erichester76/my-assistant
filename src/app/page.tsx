@@ -7,6 +7,11 @@ export default async function HomePage() {
   const { data: userResponse } = await supabase.auth.getUser(); // Get the authenticated user
   const user = userResponse?.user; // Extract the user object
 
+  if (!user) {
+    // Redirect to login page if user is not authenticated
+    redirect('/login');
+  }
+
   // Check if the user has completed setup by querying connected services
   const { data: tokens } = await supabase
     .from('user_tokens') // Table storing connected services
