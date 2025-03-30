@@ -4,22 +4,31 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  // Initialize Supabase client with the request object
+  console.log(`[Middleware] Processing request for: ${req.nextUrl.pathname}`);
+
   const supabase = createMiddlewareClient({ req, res: NextResponse.next() });
+  console.log("[Middleware] Supabase client initialized");
 
-  // Get the authenticated user
-  const { data: { user } } = await supabase.auth.getUser();
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error("[Middleware] Error fetching user:", error.message);
+    } else {
+      console.log("[Middleware] User data:", user ? user.email : "No user found");
+    }
 
-  // Check if the user is unauthenticated and trying to access a protected route
-  if (!user && !req.nextUrl.pathname.startsWith("/login") && !req.nextUrl.pathname.startsWith("/auth/callback")) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    if (!user && !req.nextUrl.pathname.startsWith("/login") && !req.nextUrl.pathname.startsWith("/auth/callback")) {
+      console.log("[Middleware] Redirecting to /login");
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+  } catch (err) {
+    console.error("[Middleware] Unexpected error:", err);
   }
 
-  // If authenticated or accessing login/callback, proceed with the request
+  console.log("[Middleware] Proceeding with request");
   return NextResponse.next();
 }
 
-// Configure which routes the middleware applies to
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
