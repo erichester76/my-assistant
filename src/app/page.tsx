@@ -25,7 +25,7 @@ export default async function HomePage() {
   const connectedServices = tokens ? tokens.map(t => t.service) : [];
 
   // Define the services required for setup completion
-  const requiredServices = ['gmail', 'office365', 'slack'];
+  const requiredServices = ['google', 'office365', 'slack'];
 
   // Check if all required services are connected
   const isSetupComplete = requiredServices.every(service =>

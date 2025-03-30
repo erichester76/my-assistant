@@ -17,7 +17,8 @@ export default function AuthComponent() {
     <Auth
       supabaseClient={supabase}
       appearance={{ theme: ThemeSupa }}
-      providers={["google", "github"]} // Optional: Add OAuth providers
+      providers={["google", "azure", "slack_oidc"]} // Optional: Add OAuth providers
+      magicLink={true} // Optional: Enable magic link login
       redirectTo={getURL()} // Redirect URL after login
    />
   );
